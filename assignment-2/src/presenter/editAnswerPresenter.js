@@ -1,24 +1,25 @@
 import answer from "../model/answer";
 import user from "../model/user";
 
-class CreateAnswerPresenter {
+class EditAnswerPresenter {
 
     onLogout() {
         window.location.assign("#");
         user.logout();
     }
 
-    onCreate(question) {
-        answer.addAnswer(question, answer.state.newAnswer.text);
+    onEdit(id, questionId) {
+        answer.editAnswer(id, answer.state.newAnswer.text);
         answer.changeNewAnswerProperty("text", "");
-        window.location.assign("#/view-question/" + question.id);
+        window.location.assign("#/view-question/" + questionId);
     }
 
     onChange(property, value) {
         answer.changeNewAnswerProperty(property, value);
     }
+
 }
 
-const createAnswerPresenter = new CreateAnswerPresenter();
+const editAnswerPresenter = new EditAnswerPresenter();
 
-export default createAnswerPresenter;
+export default editAnswerPresenter;

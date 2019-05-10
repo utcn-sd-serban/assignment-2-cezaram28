@@ -4,10 +4,8 @@
     "\\assignment-2",
     "\\assignment-2\\public",
     "\\assignment-2\\src",
-    "\\assignment-2\\src\\model",
-    "\\assignment-2\\src\\presenter",
-    "\\assignment-2\\src\\view"
+    "\\assignment-2\\src\\model"
   ],
-  "SelectedNode": "\\assignment-2\\src\\presenter\\questionsListPresenter.js",
+  "SelectedNode": "\\assignment-2\\src\\presenter",
   "PreviewInSolutionExplorer": false
 }

@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import answer from "../model/answer";
-import question from "../model/question";
-import createAnswerPresenter from "../presenter/createAnswerPresenter";
-import CreateAnswer from "./CreateAnswer";
+import editAnswerPresenter from "../presenter/editAnswerPresenter";
+import EditAnswer from "./EditAnswer";
 
 const mapAnswerStateToComponentState = (answerState, props) => ({
-    question: question.state.questions[props.match.params.index],
+    question: answerState.newAnswer.question,
+    idAnswer: props.match.params.aIndex,
+    idQuestion: props.match.params.qIndex,
     text: answerState.newAnswer.text
 });
 
-export default class SmartCreateAnswer extends Component {
+export default class SmartEditAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = mapAnswerStateToComponentState(answer.state, props);
@@ -23,12 +24,14 @@ export default class SmartCreateAnswer extends Component {
 
     render() {
         return (
-            <CreateAnswer
-                onCreate={createAnswerPresenter.onCreate}
-                onChange={createAnswerPresenter.onChange}
+            <EditAnswer
+                onEdit={editAnswerPresenter.onEdit}
+                onChange={editAnswerPresenter.onChange}
                 text={this.state.text}
-                question={this.state.question}
-                onLogout={createAnswerPresenter.onLogout} />
+                questionId={this.state.idQuestion}
+                id={this.state.idAnswer}
+                onLogout={editAnswerPresenter.onLogout}
+            />
         );
     }
 }

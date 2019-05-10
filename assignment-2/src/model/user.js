@@ -20,6 +20,14 @@ class User extends EventEmitter {
                 score: 1,
                 isAdmin: true,
                 isBanned: false
+            }, {
+                id: 2,
+                username: "a",
+                password: "a",
+                email: "a",
+                score: 1,
+                isAdmin: true,
+                isBanned: false
             }],
             newUser: {
                 id: "",
@@ -30,10 +38,83 @@ class User extends EventEmitter {
                 isAdmin: false,
                 isBanned: false
             },
-            currentUserIndex: 1,
+            currentUserIndex: 2,
             index: 2,
             route: "users-list"
         };
+    }
+
+    updateScore(id, value) {
+        let currentUser = {
+            id,
+            username: this.state.users[id].username,
+            password: this.state.users[id].password,
+            email: this.state.users[id].email,
+            score: this.state.users[id].score + value,
+            isAdmin: this.state.users[id].isAdmin,
+            isBanned: this.state.users[id].isBanned
+        };
+        let allUsers = this.state.users.concat([]);
+        allUsers[id] = currentUser;
+        this.state = {
+            ...this.state,
+            users: allUsers
+        };
+        this.emit("change", this.state);
+    }
+
+    logout() {
+        this.state = {
+            ...this.state,
+            currentUserIndex: -1
+        };
+        this.emit("change", this.state);
+    }
+
+    updateCurrentUserIndex(index) {
+        this.state = {
+            ...this.state,
+            currentUserIndex: index
+        };
+        this.emit("change", this.state);
+    }
+
+    banUser(id) {
+        let currentUser = {
+            id,
+            username: this.state.users[id].username,
+            password: this.state.users[id].password,
+            email: this.state.users[id].email,
+            score: this.state.users[id].score,
+            isAdmin: this.state.users[id].isAdmin,
+            isBanned: true
+        };
+        let allUsers = this.state.users.concat([]);
+        allUsers[id] = currentUser;
+        this.state = {
+            ...this.state,
+            users: allUsers
+        };
+        this.emit("change", this.state);
+    }
+
+    makeAdmin(id) {
+        let currentUser = {
+            id,
+            username: this.state.users[id].username,
+            password: this.state.users[id].password,
+            email: this.state.users[id].email,
+            score: this.state.users[id].score,
+            isAdmin: true,
+            isBanned: this.state.users[id].isBanned
+        };
+        let allUsers = this.state.users.concat([]);
+        allUsers[id] = currentUser;
+        this.state = {
+            ...this.state,
+            users: allUsers
+        };
+        this.emit("change", this.state);
     }
 
     changeRoute(route) {
@@ -42,6 +123,14 @@ class User extends EventEmitter {
             route
         };
         this.emit("change", this.state);
+    }
+
+    findByUsername(username) {
+        return this.state.users.filter(u => u.username == username)[0];
+    }
+
+    findByEmail(email) {
+        return this.state.users.filter(u => u.email == email)[0];
     }
 
     addUser(username, password, email) {

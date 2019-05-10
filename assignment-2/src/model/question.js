@@ -87,6 +87,55 @@ class Question extends EventEmitter {
         this.emit("change", this.state);
     }
 
+    editQuestion(id, title, text) {
+        let currentQuestion = {
+            id,
+            title,
+            author: this.state.questions[id].author,
+            text,
+            creationDate: this.state.questions[id].creationDate,
+            voteCount: this.state.questions[id].voteCount,
+            tags: this.state.questions[id].tags
+        };
+        let allQuestions = this.state.questions.concat([]);
+        allQuestions[id] = currentQuestion;
+        this.state = {
+            ...this.state,
+            questions: allQuestions
+        };
+        this.emit("change", this.state);
+    }
+
+    changeQuestionScore(id, value) {
+        let currentQuestion = {
+            id: this.state.questions[id].id,
+            title: this.state.questions[id].title,
+            author: this.state.questions[id].author,
+            text: this.state.questions[id].text,
+            creationDate: this.state.questions[id].creationDate,
+            voteCount: this.state.questions[id].voteCount + value,
+            tags: this.state.questions[id].tags
+        };
+        let allQuestions = this.state.questions.concat([]);
+        allQuestions[id] = currentQuestion;
+        this.state = {
+            ...this.state,
+            questions: allQuestions
+        };
+        this.emit("change", this.state);
+    }
+
+    deleteQuestion(id) {
+        let allQuestions = this.state.questions.concat([]);
+        let question = allQuestions.filter(q => q.id === id)[0];
+        allQuestions.splice(allQuestions.indexOf(question), 1);
+        this.state = {
+            ...this.state,
+            questions: allQuestions
+        };
+        this.emit("change", this.state);
+    }
+
     changeNewQuestionProperty(property, value) {
         this.state = {
             ...this.state,

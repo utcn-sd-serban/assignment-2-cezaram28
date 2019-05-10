@@ -31,7 +31,6 @@ class Answer extends EventEmitter {
     }
 
     findByQuestion(questionId) {
-        
         let ans = this.state.answers.filter(a => a.question.id == questionId);
         return ans;
     }
@@ -49,6 +48,53 @@ class Answer extends EventEmitter {
                 voteCount: 0
             }]),
             index: this.state.index + 1
+        };
+        this.emit("change", this.state);
+    }
+
+    editAnswer(id, text) {
+        let currentAnswer = {
+            id,
+            question: this.state.answers[id].question,
+            author: this.state.answers[id].author,
+            text,
+            creationDate: this.state.answers[id].creationDate,
+            voteCount: this.state.answers[id].voteCount
+        };
+        let allAnswers = this.state.answers.concat([]);
+        allAnswers[id] = currentAnswer;
+        this.state = {
+            ...this.state,
+            answers: allAnswers
+        };
+        this.emit("change", this.state);
+    }
+
+    changeAnswerScore(id, value) {
+        let currentAnswer = {
+            id,
+            question: this.state.answers[id].question,
+            author: this.state.answers[id].author,
+            text: this.state.answers[id].text,
+            creationDate: this.state.answers[id].creationDate,
+            voteCount: this.state.answers[id].voteCount + value
+        };
+        let allAnswers = this.state.answers.concat([]);
+        allAnswers[id] = currentAnswer;
+        this.state = {
+            ...this.state,
+            answers: allAnswers
+        };
+        this.emit("change", this.state);
+    }
+
+    deleteAnswer(id) {
+        let allAnswers = this.state.answers.concat([]);
+        let answer = allAnswers.filter(a => a.id === id)[0];
+        allAnswers.splice(allAnswers.indexOf(answer), 1);
+        this.state = {
+            ...this.state,
+            answers: allAnswers
         };
         this.emit("change", this.state);
     }

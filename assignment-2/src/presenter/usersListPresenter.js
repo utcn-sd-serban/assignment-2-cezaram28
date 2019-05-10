@@ -2,9 +2,13 @@ import user from "../model/user";
 
 class UsersListPresenter {
 
-    onCreateUser() {
-        //user.changeRoute("create-user");
-        window.location.assign("#/create-user");
+    onLogout() {
+        window.location.assign("#");
+        user.logout();
+    }
+
+    onBan(id) {
+        user.banUser(id);
     }
 
 }

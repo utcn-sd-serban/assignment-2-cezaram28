@@ -28,7 +28,8 @@ export default class SmartCreateQuestion extends Component {
                 onChange={createQuestionPresenter.onChange}
                 title={this.state.title}
                 text={this.state.text}
-                tags={this.state.tags} />
+                tags={this.state.tags}
+                onLogout={createQuestionPresenter.onLogout} />
         );
     }
 }

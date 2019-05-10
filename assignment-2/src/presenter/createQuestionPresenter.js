@@ -1,7 +1,13 @@
 import question from "../model/question";
 import tag from "../model/tag";
+import user from "../model/user";
 
 class CreateQuestionPresenter {
+
+    onLogout() {
+        window.location.assign("#");
+        user.logout();
+    }
 
     onCreate() {
         let tags = tag.toList(question.state.newQuestion.tags);

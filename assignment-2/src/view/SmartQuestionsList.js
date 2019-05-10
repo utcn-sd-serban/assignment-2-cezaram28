@@ -34,6 +34,11 @@ export default class SmartQuestionsList extends Component {
                 onCreateQuestion={questionsListPresenter.onCreateQuestion}
                 onTagClick={questionsListPresenter.onTagClick}
                 addAnswer={questionsListPresenter.addAnswer}
+                onVote={questionsListPresenter.onVote}
+                onEdit={questionsListPresenter.onEdit}
+                onDelete={questionsListPresenter.onDelete}
+                onLogout={questionsListPresenter.onLogout}
+                onUsers={questionsListPresenter.onUsers}
             />
         );
     }

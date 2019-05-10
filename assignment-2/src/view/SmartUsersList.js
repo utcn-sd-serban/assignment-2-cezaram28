@@ -22,8 +22,9 @@ export default class SmartUsersList extends Component {
     render() {
         return (
             <UsersList
-                onCreateUser={usersListPresenter.onCreateUser}
-                users={this.state.users} />
+                users={this.state.users}
+                onLogout={usersListPresenter.onLogout}
+                onBan={usersListPresenter.onBan} />
         );
     }
 }

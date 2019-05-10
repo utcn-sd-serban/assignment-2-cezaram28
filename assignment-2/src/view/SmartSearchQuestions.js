@@ -28,6 +28,11 @@ export default class SmartSearchQuestions extends Component {
                 questions={this.state.questions}
                 onViewDetails={questionsListPresenter.onViewDetails}
                 onCreateQuestion={questionsListPresenter.onCreateQuestion}
+                onEdit={questionsListPresenter.onEdit}
+                onDelete={questionsListPresenter.onDelete}
+                onVote={questionsListPresenter.onVote}
+                onLogout={questionsListPresenter.onLogout}
+                addAnswer={questionsListPresenter.addAnswer}
             />
         );
     }

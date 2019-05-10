@@ -1,7 +1,7 @@
 import React from "react";
 import user from "../model/user";
 
-const CreateAnswer = ({ text, question, onCreate, onChange, onLogout }) => (
+const EditAnswer = ({ text, id, questionId, onEdit, onChange, onLogout }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -23,18 +23,18 @@ const CreateAnswer = ({ text, question, onCreate, onChange, onLogout }) => (
             </div>
         </nav>
         <div class="container is-fluid">
-            <h2 class="title">Add Answer</h2>
+            <h2 class="title">Edit Answer</h2>
             <div>
                 <div class="field">
                     <div class="control">
-                        <textarea value={text} onChange={e => onChange("text", e.target.value)} class="textarea is-primary" type="text" placeholder="Answer Text" />
+                        <textarea value={text} onChange={e => onChange("text", e.target.value)} class="textarea is-primary" type="text" placeholder="New Text" />
                     </div>
                 </div>
                 <br />
-                <button class="button is-primary" onClick={() => onCreate(question)}>Add!</button>
+                <button class="button is-primary" onClick={() => onEdit(id, questionId)}>Edit!</button>
             </div>
         </div>
     </div>
 );
 
-export default CreateAnswer;
+export default EditAnswer;

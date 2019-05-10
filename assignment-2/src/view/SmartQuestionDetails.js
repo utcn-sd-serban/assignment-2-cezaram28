@@ -39,7 +39,11 @@ export default class SmartQuestionDetails extends Component {
                 voteCount={this.state.question.voteCount}
                 tags={tag.toString(this.state.question.tags)}
                 answers={this.state.answers}
+                onEdit={questionDetailsPresenter.onEdit}
                 addAnswer={questionDetailsPresenter.addAnswer}
+                onDelete={questionDetailsPresenter.onDelete}
+                onVote={questionDetailsPresenter.onVote}
+                onLogout={questionDetailsPresenter.onLogout}
             />
         );
     }
