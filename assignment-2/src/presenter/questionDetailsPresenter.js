@@ -1,12 +1,15 @@
-import answer from "../model/answer";
-import vote from "../model/vote";
-import user from "../model/user";
+import * as userActions from "../model/user/userActions";
+import * as userSelectors from "../model/user/userSelectors";
+import * as answerActions from "../model/answer/answerActions";
+import * as voteSelectors from "../model/vote/voteSelectors";
+import * as voteActions from "../model/vote/voteActions";
+import store from "../model/store/store";
 
 class QuestionDetailsPresenter {
 
     onLogout() {
         window.location.assign("#");
-        user.logout();
+        store.dispatch(userActions.logout());
     }
 
     addAnswer(index) {
@@ -18,40 +21,41 @@ class QuestionDetailsPresenter {
     }
 
     onDelete(index) {
-        answer.deleteAnswer(index);
+        store.dispatch(answerActions.deleteAnswer(index));
     }
 
     onVote(votedQuestion, votedAnswer, type) {
         if (votedAnswer !== undefined) {
-            let v = vote.findByAnswer(votedAnswer.id, user.state.currentUserIndex);
+            let v = voteSelectors.findByAnswer(votedAnswer.id, userSelectors.getCurrentIndex());
             if (v.length > 0) {
                 //already voted
                 if (v[0].type === "up" && type === "down") {
                     //change from upvote to downvote
-                    user.updateScore(votedAnswer.author.id, -12);
-                    user.updateScore(user.state.currentUserIndex, -1);
-                    answer.changeAnswerScore(votedAnswer.id, -2);
-                    vote.changeVoteType(v[0].id, type);
+
+                    store.dispatch(userActions.updateScore(votedAnswer.author.id, -12));
+                    store.dispatch(userActions.updateScore(userSelectors.getCurrentIndex(), -1));
+                    store.dispatch(answerActions.changeAnswerScore(votedAnswer.id, -2));
+                    store.dispatch(voteActions.changeVoteType(v[0].id, type));
                 }
                 else if (v[0].type === "down" && type === "up") {
                     //change from down to up
-                    user.updateScore(votedAnswer.author.id, 12);
-                    user.updateScore(user.state.currentUserIndex, 1);
-                    answer.changeAnswerScore(votedAnswer.id, 2);
-                    vote.changeVoteType(v[0].id, type);
+                    store.dispatch(userActions.updateScore(votedAnswer.author.id, 12));
+                    store.dispatch(userActions.updateScore(userSelectors.getCurrentIndex(), 1));
+                    store.dispatch(answerActions.changeAnswerScore(votedAnswer.id, 2));
+                    store.dispatch(voteActions.changeVoteType(v[0].id, type));
                 }
             } else {
-                vote.addVote(undefined, votedAnswer, type);
+                store.dispatch(voteActions.addVote(undefined, votedAnswer, type, userSelectors.getCurrentUser()));
                 if (type === "down") {
                     //downvote
-                    user.updateScore(votedAnswer.author.id, -2);
-                    user.updateScore(user.state.currentUserIndex, -1);
-                    answer.changeAnswerScore(votedAnswer.id, 1);
+                    store.dispatch(userActions.updateScore(votedAnswer.author.id, -2));
+                    store.dispatch(userActions.updateScore(userSelectors.getCurrentIndex(), -1));
+                    store.dispatch(answerActions.changeAnswerScore(votedAnswer.id, -1));
                 }
                 else {
                     //up
-                    user.updateScore(votedAnswer.author.id, 10);
-                    answer.changeAnswerScore(votedAnswer.id, 1);
+                    store.dispatch(userActions.updateScore(votedAnswer.author.id, 10));
+                    store.dispatch(answerActions.changeAnswerScore(votedAnswer.id, 1));
                 }
             }
         }
@@ -60,5 +64,4 @@ class QuestionDetailsPresenter {
 }
 
 const questionDetailsPresenter = new QuestionDetailsPresenter();
-
 export default questionDetailsPresenter;

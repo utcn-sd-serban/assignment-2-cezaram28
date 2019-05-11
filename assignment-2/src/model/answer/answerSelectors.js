@@ -8,3 +8,7 @@ export function findByQuestion(questionId) {
     let ans = store.getState().answerState.answers.filter(a => a.question.id == questionId);
     return ans;
 }
+
+export function getNewAnswer() {
+    return store.getState().answerState.newAnswer;
+}

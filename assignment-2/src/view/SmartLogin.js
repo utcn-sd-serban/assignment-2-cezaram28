@@ -1,33 +1,36 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Login from "./Login";
 import LoginPresenter from "../presenter/loginPresenter";
-import user from "../model/user";
 
-const mapUserStateToComponentState = userState => ({
-    username: userState.newUser.username,
-    password: userState.newUser.password
+const mapUserStateToComponentState = state => ({
+    username: state.userState.newUser.username,
+    password: state.userState.newUser.password
 });
 
-export default class SmartLogin extends Component {
-    constructor(props) {
-        super(props);
-        this.state = mapUserStateToComponentState(user.state);
-        this.listener = userState => this.setState(mapUserStateToComponentState(userState));
-        user.addListener("change", this.listener);
-    }
+function mapDispatchToProps(dispatch) {
+    return {
+        onChange: LoginPresenter.onChange,
+        onLogin: LoginPresenter.onLogin,
+        onRegister: LoginPresenter.onRegister
+    };
+}
 
-    componentWillUnmount() {
-        user.removeListener("change", this.listener);
-    }
+class SmartLogin extends Component {
+    constructor() {
+        super();
+     }
 
     render() {
         return (
             <Login
-                onLogin={LoginPresenter.onLogin}
-                onRegister={LoginPresenter.onRegister}
-                username={this.state.username}
-                password={this.state.password}
-                onChange={LoginPresenter.onChange} />
+                onLogin={this.props.onLogin}
+                onRegister={this.props.onRegister}
+                username={this.props.username}
+                password={this.props.password}
+                onChange={this.props.onChange} />
         );
     }
 }
+
+export default connect(mapUserStateToComponentState, mapDispatchToProps)(SmartLogin);

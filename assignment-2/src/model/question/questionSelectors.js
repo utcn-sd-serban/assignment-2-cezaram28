@@ -1,8 +1,8 @@
+import { changeNewQuestionProperty } from "./questionActions";
 import store from "../store/store";
 
 export function findByTitle(title) {
     let res = store.getState().questionState.questions.filter(q => q.title.includes(title));
-    store.dispatch(changeNewQuestionProperty("title", ""));
     return res;
 }
 
@@ -16,10 +16,13 @@ export function findByTag(tag) {
             }
         }
     }
-    store.dispatch(changeNewQuestionProperty("tags", ""));
     return questions;
 }
 
 export function findByAuthor(username) {
     return store.getState().questionState.questions.filter(q => q.author.username === username);
+}
+
+export function getNewQuestion() {
+    return store.getState().questionState.newQuestion;
 }

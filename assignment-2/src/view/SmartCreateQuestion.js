@@ -1,35 +1,40 @@
 import React, { Component } from "react";
-import question from "../model/question";
+import { connect } from "react-redux";
 import createQuestionPresenter from "../presenter/createQuestionPresenter";
 import CreateQuestion from "./CreateQuestion";
 
-const mapQuestionStateToComponentState = questionState => ({
-    title: questionState.newQuestion.title,
-    text: questionState.newQuestion.text,
-    tags: questionState.newQuestion.tags
+const mapQuestionStateToComponentState = state => ({
+    title: state.questionState.newQuestion.title,
+    user: state.userState.users[state.userState.currentUserIndex],
+    text: state.questionState.newQuestion.text,
+    tags: state.questionState.newQuestion.tags
 });
 
-export default class SmartCreateQuestion extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        onCreate: createQuestionPresenter.onCreate,
+        onChange: createQuestionPresenter.onChange,
+        onLogout: createQuestionPresenter.onLogout
+    }
+}
+
+class SmartCreateQuestion extends Component {
     constructor() {
         super();
-        this.state = mapQuestionStateToComponentState(question.state);
-        this.listener = questionState => this.setState(mapQuestionStateToComponentState(questionState));
-        question.addListener("change", this.listener);
-    }
-
-    componentWillUnmount() {
-        question.removeListener("change", this.listener);
     }
 
     render() {
         return (
             <CreateQuestion
-                onCreate={createQuestionPresenter.onCreate}
-                onChange={createQuestionPresenter.onChange}
-                title={this.state.title}
-                text={this.state.text}
-                tags={this.state.tags}
-                onLogout={createQuestionPresenter.onLogout} />
+                title={this.props.title}
+                onCreate={this.props.onCreate}
+                onChange={this.props.onChange}
+                text={this.props.text}
+                question={this.props.question}
+                user={this.props.user}
+                onLogout={this.props.onLogout} />
         );
     }
 }
+
+export default connect(mapQuestionStateToComponentState, mapDispatchToProps)(SmartCreateQuestion);

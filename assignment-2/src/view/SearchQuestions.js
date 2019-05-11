@@ -1,8 +1,7 @@
 import React from "react";
-import tag from "../model/tag";
-import user from "../model/user";
+import * as tagSelector from "../model/tag/tagSelectors";
 
-const SearchQuestions = ({ questions, onCreateQuestion, onViewDetails, addAnswer, onVote, onEdit, onDelete, onLogout }) => (
+const SearchQuestions = ({ user, questions, onCreateQuestion, onViewDetails, addAnswer, onVote, onEdit, onDelete, onLogout }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -13,7 +12,7 @@ const SearchQuestions = ({ questions, onCreateQuestion, onViewDetails, addAnswer
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.users[user.state.currentUserIndex].username}
+                        {user !== undefined ? user.username : ""}
                     </a>
                     <div class="buttons">
                         <a class="button is-light" onClick={onLogout}>
@@ -52,13 +51,13 @@ const SearchQuestions = ({ questions, onCreateQuestion, onViewDetails, addAnswer
                                 <td>{question.text}</td>
                                 <td>{question.voteCount}</td>
                                 <td>{question.creationDate}</td>
-                                <td>{tag.toString(question.tags)}</td>
+                                <td>{tagSelector.toString(question.tags)}</td>
                                 <td><button class="button is-small" onClick={() => onViewDetails(question.id)}>View Details</button></td>
                                 <td><button class="button is-small" onClick={() => addAnswer(question.id)}>Add Answer</button></td>
-                                <td>{question.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(question, undefined, "up")}>Upvote</button> : ""}</td>
-                                <td>{question.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(question, undefined, "down")}>Downvote</button> : ""}</td>
-                                <td>{user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onEdit(question.id)}>Edit</button> : ""}</td>
-                                <td>{user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onDelete(question.id)}>Delete</button> : ""}</td>
+                                <td>{user !== undefined && question.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(question, undefined, "up")}>Upvote</button> : ""}</td>
+                                <td>{user !== undefined && question.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(question, undefined, "down")}>Downvote</button> : ""}</td>
+                                <td>{user !== undefined && user.isAdmin ? <button class="button is-small" onClick={() => onEdit(question.id)}>Edit</button> : ""}</td>
+                                <td>{user !== undefined && user.isAdmin ? <button class="button is-small" onClick={() => onDelete(question.id)}>Delete</button> : ""}</td>
                             </tr>
                         ))
                     }

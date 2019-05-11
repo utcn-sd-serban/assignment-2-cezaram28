@@ -1,7 +1,6 @@
 import React from "react";
-import user from "../model/user";
 
-const EditQuestion = ({ title, text, id, onEdit, onChange, onLogout }) => (
+const EditQuestion = ({ user, title, text, id, onEdit, onChange, onLogout }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -12,7 +11,7 @@ const EditQuestion = ({ title, text, id, onEdit, onChange, onLogout }) => (
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.users[user.state.currentUserIndex].username}
+                        {user !== undefined ? user.username : ""}
                     </a>
                     <div class="buttons">
                         <a class="button is-light" onClick={onLogout}>

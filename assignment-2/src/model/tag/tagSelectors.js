@@ -1,4 +1,5 @@
 import store from "../store/store";
+import * as tagActions from "./tagActions";
 
 export function toString(tags) {
     let s = "";
@@ -17,11 +18,20 @@ export function toList(tags) {
     let tagList = [];
     for (let i = 0; i < tagNames.length; i++) {
         let ind = found(tagNames[i]);
-        ind === -1 ? tagList.push(addTag(tagNames[i])) : tagList.push(store.getState().tagState.tags[ind]);
+        if (ind === -1) {
+            store.dispatch(tagActions.addTag(tagNames[i]));
+            tagList.push(returnTag(tagNames[i]));
+        } else {
+            tagList.push(store.getState().tagState.tags[ind]);
+        }
     }
     return tagList;
 }
 
 export function returnTag(tag) {
     return store.getState().tagState.tags.filter(t => t.name === tag)[0];
+}
+
+export function getNewTag() {
+    return store.getState().tagState.newTag;
 }

@@ -1,4 +1,6 @@
-import user from "../model/user";
+import * as userActions from "../model/user/userActions";
+import * as userSelectors from "../model/user/userSelectors";
+import store from "../model/store/store";
 
 class RegisterPresenter {
 
@@ -7,16 +9,17 @@ class RegisterPresenter {
     }
 
     onRegister() {
-        let userByName = user.findByUsername(user.state.newUser.username);
+        let newUser = userSelectors.getNewUser();
+        let userByName = userSelectors.findByUsername(newUser.username);
         if (userByName === undefined) {
-            let userByMail = user.findByEmail(user.state.newUser.email);
+            let userByMail = userSelectors.findByEmail(newUser.email);
             if (userByMail === undefined) {
-                user.addUser(user.state.newUser.username, user.state.newUser.password, user.state.newUser.email);
-                user.updateCurrentUserIndex(user.state.index);
+                store.dispatch(userActions.addUser(newUser.username, newUser.password, newUser.email));
+                store.dispatch(userActions.updateCurrentUserIndex(userSelectors.getIndex()));
                 window.location.assign("#/questions-list");
-                user.changeNewUserProperty("username", "");
-                user.changeNewUserProperty("password", "");
-                user.changeNewUserProperty("email", "");
+                store.dispatch(userActions.changeNewUserProperty("username", ""));
+                store.dispatch(userActions.changeNewUserProperty("password", ""));
+                store.dispatch(userActions.changeNewUserProperty("email", ""));
             } else {
                 alert("User exists!");
             }
@@ -26,11 +29,10 @@ class RegisterPresenter {
     }
 
     onChange(property, value) {
-        user.changeNewUserProperty(property, value);
+        store.dispatch(userActions.changeNewUserProperty(property, value));
     }
 
 }
 
 const registerPresenter = new RegisterPresenter();
-
 export default registerPresenter;

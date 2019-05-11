@@ -4,19 +4,44 @@ const initState = {
     questions: [{
         id: 0,
         title: "it's a title",
-        author: store.getState().userState.users[0],
+        author: {
+            id: 0,
+            username: "mckfchicken",
+            password: "burgr",
+            email: "mckfc@subway.com",
+            score: 5,
+            isAdmin: false,
+            isBanned: false
+        },
         text: "some text",
         creationDate: "some date",
         voteCount: 5,
-        tags: [store.getState().tagState.tags[1]]
+        tags: [{
+            id: 0,
+            name: "java"
+        }]
     }, {
         id: 1,
         title: "my question is",
-        author: store.getState().userState.users[0],
+            author: {
+                id: 0,
+                username: "mckfchicken",
+                password: "burgr",
+                email: "mckfc@subway.com",
+                score: 5,
+                isAdmin: false,
+                isBanned: false
+            },
         text: "this",
         creationDate: "some date",
         voteCount: 1,
-        tags: [store.getState().tagState.tags[0], store.getState().tagState.tags[1]]
+        tags: [{
+            id: 0,
+            name: "java"
+        }, {
+            id: 1,
+            name: "programming"
+        }]
     }],
     newQuestion: {
         id: "",
@@ -33,15 +58,15 @@ const initState = {
 export default function questionReducer(state = initState, action) {
     switch (action.type) {
         case "ADD_QUESTION":
-            return addQuestion(state, payload);
+            return addQuestion(state, action.payload);
         case "EDIT_QUESTION":
-            return editQuestion(state, payload);
+            return editQuestion(state, action.payload);
         case "CHANGE_QUESTION_SCORE":
-            return changeQuestionScore(state, payload);
+            return changeQuestionScore(state, action.payload);
         case "DELETE_QUESTION":
-            return deleteQuestion(state, payload);
+            return deleteQuestion(state, action.payload);
         case "CHANGE_QUESTION_PROP":
-            return changeNewQuestionProperty(state, payload);
+            return changeNewQuestionProperty(state, action.payload);
     }
     return state;
 }
@@ -53,7 +78,7 @@ function addQuestion(state, payload) {
         questions: state.questions.concat([{
             id: state.index,
             title: payload.title,
-            author: store.getState().userState.users[store.getState().userState.currentUserIndex],
+            author: payload.user,
             text: payload.text,
             creationDate: now.toLocaleString(),
             voteCount: 0,
@@ -88,7 +113,7 @@ function changeQuestionScore(state, payload) {
         author: state.questions[payload.id].author,
         text: state.questions[payload.id].text,
         creationDate: state.questions[payload.id].creationDate,
-        voteCount: state.questions[payload.id].voteCount + value,
+        voteCount: state.questions[payload.id].voteCount + payload.value,
         tags: state.questions[payload.id].tags
     };
     let allQuestions = state.questions.concat([]);

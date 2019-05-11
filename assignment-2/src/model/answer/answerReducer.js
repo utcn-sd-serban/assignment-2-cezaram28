@@ -3,8 +3,40 @@ import store from "../store/store";
 const initState = {
     answers: [{
         id: 0,
-        question: store.getState().questionState.questions[0],
-        author: store.getState().userState.users[1],
+        //question: store.getState().questionState.questions[0],
+        question: {
+            id: 0,
+            title: "it's a title",
+            author: {
+                id: 0,
+                username: "mckfchicken",
+                password: "burgr",
+                email: "mckfc@subway.com",
+                score: 5,
+                isAdmin: false,
+                isBanned: false
+            },
+            text: "some text",
+            creationDate: "some date",
+            voteCount: 5,
+            tags: [{
+                id: 0,
+                name: "java"
+            }, {
+                id: 1,
+                name: "programming"
+            }]
+        },
+        //author: store.getState().userState.users[1],
+        author: {
+            id: 0,
+            username: "mckfchicken",
+            password: "burgr",
+            email: "mckfc@subway.com",
+            score: 5,
+            isAdmin: false,
+            isBanned: false
+        },
         text: "here's an answer",
         creationDate: "later",
         voteCount: 1
@@ -43,7 +75,7 @@ function addAnswer(state, payload) {
         answers: state.answers.concat([{
             id: state.index,
             question: payload.question,
-            author: store.getState().userState.users[store.getState().userState.currentUserIndex],
+            author: payload.user,
             text: payload.text,
             creationDate: now.toLocaleString(),
             voteCount: 0

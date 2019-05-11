@@ -1,30 +1,34 @@
 import React, { Component } from "react";
-import user from "../model/user";
+import { connect } from "react-redux";
 import UsersList from "./UsersList"
 import usersListPresenter from "../presenter/usersListPresenter";
 
-const mapUserStateToComponentState = userState => ({
-    users: userState.users
+const mapUserStateToComponentState = state => ({
+    users: state.userState.users,
+    user: state.userState.users[state.userState.currentUserIndex]
 });
 
-export default class SmartUsersList extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        onLogout: usersListPresenter.onLogout,
+        onBan: usersListPresenter.onBan
+    };
+}
+
+class SmartUsersList extends Component {
     constructor() {
         super();
-        this.state = mapUserStateToComponentState(user.state);
-        this.listener = userState => this.setState(mapUserStateToComponentState(userState));
-        user.addListener("change", this.listener);
-    }
-
-    componentWillUnmount() {
-        user.removeListener("change", this.listener);
     }
 
     render() {
         return (
             <UsersList
-                users={this.state.users}
-                onLogout={usersListPresenter.onLogout}
-                onBan={usersListPresenter.onBan} />
+                user={this.props.user}
+                users={this.props.users}
+                onLogout={this.props.onLogout}
+                onBan={this.props.onBan} />
         );
     }
 }
+
+export default connect(mapUserStateToComponentState, mapDispatchToProps)(SmartUsersList);

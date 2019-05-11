@@ -1,7 +1,6 @@
 import React from "react";
-import user from "../model/user";
 
-const UsersList = ({ users, title, onLogout, onBan }) => (
+const UsersList = ({ user, users, title, onLogout, onBan }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -12,7 +11,7 @@ const UsersList = ({ users, title, onLogout, onBan }) => (
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.currentUserIndex !== -1 ? user.state.users[user.state.currentUserIndex].username : ""}
+                        {user !== undefined ? user.username : ""}
                     </a>
                     <div class="buttons">
                         <a class="button is-light" onClick={onLogout}>
@@ -38,7 +37,7 @@ const UsersList = ({ users, title, onLogout, onBan }) => (
                             <tr key={index}>
                                 <td>{u.username}</td>
                                 <td>{u.score}</td>
-                                <td>{user.state.currentUserIndex !== -1 ? user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onBan(u.id)}>Ban</button> : "" : ""}</td>
+                                <td>{user !== undefined && user.id !== -1 ? user.isAdmin ? <button class="button is-small" onClick={() => onBan(u.id)}>Ban</button> : "" : ""}</td>
                             </tr>
                         ))
                     }

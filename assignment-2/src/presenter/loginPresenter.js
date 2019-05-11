@@ -1,17 +1,20 @@
-import user from "../model/user";
+import store from "../model/store/store";
+import * as userActions from "../model/user/userActions";
+import * as userSelectors from "../model/user/userSelectors";
 
 class LoginPresenter {
 
     onLogin() {
-        let currentUser = user.findByUsername(user.state.newUser.username);
-        if (currentUser !== undefined && currentUser.password === user.state.newUser.password) {
+        let newUser = userSelectors.getNewUser();
+        let currentUser = userSelectors.findByUsername(newUser.username);
+        if (currentUser !== undefined && currentUser.password === newUser.password) {
             if (currentUser.isBanned) {
                 alert("User banned!");
             } else {
-                user.updateCurrentUserIndex(currentUser.id);
+                store.dispatch(userActions.updateCurrentUserIndex(currentUser.id));
                 window.location.assign("#/questions-list");
-                user.changeNewUserProperty("username", "");
-                user.changeNewUserProperty("password", "");
+                store.dispatch(userActions.changeNewUserProperty("username", ""));
+                store.dispatch(userActions.changeNewUserProperty("password", ""));
             }
         } else {
             alert("Bad credentials!");
@@ -23,11 +26,9 @@ class LoginPresenter {
     }
 
     onChange(property, value) {
-        user.changeNewUserProperty(property, value);
+        store.dispatch(userActions.changeNewUserProperty(property, value));
     }
-
 }
 
 const loginPresenter = new LoginPresenter();
-
 export default loginPresenter;

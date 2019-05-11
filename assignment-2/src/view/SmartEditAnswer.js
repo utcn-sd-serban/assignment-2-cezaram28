@@ -1,37 +1,42 @@
 import React, { Component } from "react";
-import answer from "../model/answer";
 import editAnswerPresenter from "../presenter/editAnswerPresenter";
 import EditAnswer from "./EditAnswer";
+import { connect } from "react-redux";
 
-const mapAnswerStateToComponentState = (answerState, props) => ({
-    question: answerState.newAnswer.question,
+const mapAnswerStateToComponentState = (state, props) => ({
+    question: state.answerState.newAnswer.question,
+    user: state.userState.users[state.userState.currentUserIndex],
     idAnswer: props.match.params.aIndex,
     idQuestion: props.match.params.qIndex,
-    text: answerState.newAnswer.text
+    text: state.answerState.newAnswer.text
 });
 
-export default class SmartEditAnswer extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        onEdit: editAnswerPresenter.onEdit,
+        onChange: editAnswerPresenter.onChange,
+        onLogout: editAnswerPresenter.onLogout
+    }
+}
+
+class SmartEditAnswer extends Component {
     constructor(props) {
         super(props);
-        this.state = mapAnswerStateToComponentState(answer.state, props);
-        this.listener = answerState => this.setState(mapAnswerStateToComponentState(answerState, props));
-        answer.addListener("change", this.listener);
-    }
-
-    componentWillUnmount() {
-        answer.removeListener("change", this.listener);
     }
 
     render() {
         return (
             <EditAnswer
-                onEdit={editAnswerPresenter.onEdit}
-                onChange={editAnswerPresenter.onChange}
-                text={this.state.text}
-                questionId={this.state.idQuestion}
-                id={this.state.idAnswer}
-                onLogout={editAnswerPresenter.onLogout}
+                onEdit={this.props.onEdit}
+                onChange={this.props.onChange}
+                text={this.props.text}
+                questionId={this.props.idQuestion}
+                id={this.props.idAnswer}
+                onLogout={this.props.onLogout}
+                user={this.props.user}
             />
         );
     }
 }
+
+export default connect(mapAnswerStateToComponentState, mapDispatchToProps)(SmartEditAnswer);

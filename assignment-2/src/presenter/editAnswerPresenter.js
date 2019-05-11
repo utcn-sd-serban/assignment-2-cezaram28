@@ -1,25 +1,25 @@
-import answer from "../model/answer";
-import user from "../model/user";
+import * as answerActions from "../model/answer/answerActions";
+import * as answerSelectors from "../model/answer/answerSelectors";
+import * as userActions from "../model/user/userActions";
+import store from "../model/store/store";
 
 class EditAnswerPresenter {
 
     onLogout() {
         window.location.assign("#");
-        user.logout();
+        store.dispatch(userActions.logout());
     }
 
     onEdit(id, questionId) {
-        answer.editAnswer(id, answer.state.newAnswer.text);
-        answer.changeNewAnswerProperty("text", "");
+        store.dispatch(answerActions.editAnswer(id, answerSelectors.getNewAnswer().text));
+        store.dispatch(answerActions.changeNewAnswerProperty("text", ""));
         window.location.assign("#/view-question/" + questionId);
     }
 
     onChange(property, value) {
-        answer.changeNewAnswerProperty(property, value);
+        store.dispatch(answerActions.changeNewAnswerProperty(property, value));
     }
-
 }
 
 const editAnswerPresenter = new EditAnswerPresenter();
-
 export default editAnswerPresenter;

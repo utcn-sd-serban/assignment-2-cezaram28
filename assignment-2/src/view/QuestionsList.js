@@ -1,9 +1,8 @@
 import React from "react";
-import tag from "../model/tag";
-import user from "../model/user";
+import * as tagSelector from "../model/tag/tagSelectors";
 import 'bulma/css/bulma.css';
 
-const QuestionsList = ({ questions, tags, title, onSearch, onChange, onCreateQuestion, onViewDetails, onTagClick, addAnswer, onVote, onEdit, onDelete, onLogout, onUsers }) => (
+const QuestionsList = ({ questions, user, tags, title, onSearch, onChange, onCreateQuestion, onViewDetails, onTagClick, addAnswer, onVote, onEdit, onDelete, onLogout, onUsers }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -14,10 +13,10 @@ const QuestionsList = ({ questions, tags, title, onSearch, onChange, onCreateQue
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.users[user.state.currentUserIndex].username}
+                        {user !== undefined ? user.username: ""}
                     </a>
                     <div class="buttons">
-                        {user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-light" onClick={onUsers}>Users</button> : ""}
+                        {user !== undefined && user.isAdmin ? <button class="button is-light" onClick={onUsers}>Users</button> : ""}
                         <a class="button is-light" onClick={onLogout}>
                             Logout
                         </a>
@@ -67,13 +66,13 @@ const QuestionsList = ({ questions, tags, title, onSearch, onChange, onCreateQue
                                 <td>{question.text}</td>
                                 <td>{question.voteCount}</td>
                                 <td>{question.creationDate}</td>
-                                <td>{tag.toString(question.tags)}</td>
+                                <td>{tagSelector.toString(question.tags)}</td>
                                 <td><button class="button is-small" onClick={() => onViewDetails(question.id)}>View Details</button></td>
                                 <td><button class="button is-small" onClick={() => addAnswer(question.id)}>Add Answer</button></td>
-                                <td>{question.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(question, undefined, "up")}>Upvote</button> : ""}</td>
-                                <td>{question.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(question, undefined, "down")}>Downvote</button> : ""}</td>
-                                <td>{user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onEdit(question.id)}>Edit</button> : ""}</td>
-                                <td>{user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onDelete(question.id)}>Delete</button> : ""}</td>
+                                <td>{user !== undefined && question.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(question, undefined, "up")}>Upvote</button> : ""}</td>
+                                <td>{user !== undefined && question.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(question, undefined, "down")}>Downvote</button> : ""}</td>
+                                <td>{user !== undefined && user.isAdmin ? <button class="button is-small" onClick={() => onEdit(question.id)}>Edit</button> : ""}</td>
+                                <td>{user !== undefined && user.isAdmin ? <button class="button is-small" onClick={() => onDelete(question.id)}>Delete</button> : ""}</td>
                             </tr>
                         ))
                     }

@@ -1,45 +1,61 @@
 import React, { Component } from "react";
-import question from "../model/question";
-import tag from "../model/tag";
-import QuestionsList from "./QuestionsList"
+import QuestionsList from "./QuestionsList";
+import { connect } from "react-redux";
 import questionsListPresenter from "../presenter/questionsListPresenter";
 
-const mapQuestionStateToComponentState = (questionState, tagState) => ({
-    questions: questionState.questions,
-    title: questionState.newQuestion.title,
-    tags: tagState.tags
+const mapQuestionStateToComponentState = (state) => ({
+    questions: state.questionState.questions,
+    title: state.questionState.newQuestion.title,
+    user: state.userState.users[state.userState.currentUserIndex],
+    tags: state.tagState.tags
 });
 
-export default class SmartQuestionsList extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        onSearch: questionsListPresenter.onSearch,
+        onChange: questionsListPresenter.onChange,
+        onViewDetails: questionsListPresenter.onViewDetails,
+        onCreateQuestion: questionsListPresenter.onCreateQuestion,
+        onTagClick: questionsListPresenter.onTagClick,
+        addAnswer: questionsListPresenter.addAnswer,
+        onVote: questionsListPresenter.onVote,
+        onEdit: questionsListPresenter.onEdit,
+        onDelete: questionsListPresenter.onDelete,
+        onLogout: questionsListPresenter.onLogout,
+        onUsers: questionsListPresenter.onUsers
+    };
+}
+
+class SmartQuestionsList extends Component {
     constructor() {
         super();
-        this.state = mapQuestionStateToComponentState(question.state, tag.state);
-        this.listener = questionState => this.setState(mapQuestionStateToComponentState(questionState, tag.state));
-        question.addListener("change", this.listener);
     }
 
-    componentWillUnmount() {
-        question.removeListener("change", this.listener);
+    componentDidMount() {
+        questionsListPresenter.init();
     }
 
     render() {
         return (
             <QuestionsList
-                questions={this.state.questions}
-                tags={this.state.tags}
-                title={this.state.title}
-                onSearch={questionsListPresenter.onSearch}
-                onChange={questionsListPresenter.onChange}
-                onViewDetails={questionsListPresenter.onViewDetails}
-                onCreateQuestion={questionsListPresenter.onCreateQuestion}
-                onTagClick={questionsListPresenter.onTagClick}
-                addAnswer={questionsListPresenter.addAnswer}
-                onVote={questionsListPresenter.onVote}
-                onEdit={questionsListPresenter.onEdit}
-                onDelete={questionsListPresenter.onDelete}
-                onLogout={questionsListPresenter.onLogout}
-                onUsers={questionsListPresenter.onUsers}
+                user={this.props.user}
+                questions={this.props.questions}
+                tags={this.props.tags}
+                title={this.props.title}
+                onSearch={this.props.onSearch}
+                onChange={this.props.onChange}
+                onViewDetails={this.props.onViewDetails}
+                onCreateQuestion={this.props.onCreateQuestion}
+                onTagClick={this.props.onTagClick}
+                addAnswer={this.props.addAnswer}
+                onVote={this.props.onVote}
+                onEdit={this.props.onEdit}
+                onDelete={this.props.onDelete}
+                onLogout={this.props.onLogout}
+                onUsers={this.props.onUsers}
             />
         );
     }
 }
+
+export default connect(mapQuestionStateToComponentState, mapDispatchToProps)(SmartQuestionsList);

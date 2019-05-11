@@ -16,7 +16,7 @@ const initState = {
 export default function tagReducer(state = initState, action) {
     switch (action.type) {
         case "ADD_TAG":
-            return addTag(state, payload);
+            return addTag(state, action.payload);
     }
     return state;
 }

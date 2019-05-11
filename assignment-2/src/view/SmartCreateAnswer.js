@@ -1,34 +1,38 @@
 import React, { Component } from "react";
-import answer from "../model/answer";
-import question from "../model/question";
+import { connect } from "react-redux";
 import createAnswerPresenter from "../presenter/createAnswerPresenter";
 import CreateAnswer from "./CreateAnswer";
 
-const mapAnswerStateToComponentState = (answerState, props) => ({
-    question: question.state.questions[props.match.params.index],
-    text: answerState.newAnswer.text
+const mapAnswerStateToComponentState = (state, props) => ({
+    question: state.questionState.questions[props.match.params.index],
+    user: state.userState.users[state.userState.currentUserIndex],
+    text: state.answerState.newAnswer.text
 });
 
-export default class SmartCreateAnswer extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        onCreate: createAnswerPresenter.onCreate,
+        onChange: createAnswerPresenter.onChange,
+        onLogout: createAnswerPresenter.onLogout
+    };
+}
+
+class SmartCreateAnswer extends Component {
     constructor(props) {
         super(props);
-        this.state = mapAnswerStateToComponentState(answer.state, props);
-        this.listener = answerState => this.setState(mapAnswerStateToComponentState(answerState, props));
-        answer.addListener("change", this.listener);
     }
-
-    componentWillUnmount() {
-        answer.removeListener("change", this.listener);
-    }
-
+    
     render() {
         return (
             <CreateAnswer
-                onCreate={createAnswerPresenter.onCreate}
-                onChange={createAnswerPresenter.onChange}
-                text={this.state.text}
-                question={this.state.question}
-                onLogout={createAnswerPresenter.onLogout} />
+                onCreate={this.props.onCreate}
+                onChange={this.props.onChange}
+                text={this.props.text}
+                question={this.props.question}
+                user={this.props.user}
+                onLogout={this.props.onLogout} />
         );
     }
 }
+
+export default connect(mapAnswerStateToComponentState, mapDispatchToProps)(SmartCreateAnswer);

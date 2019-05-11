@@ -8,10 +8,7 @@ class StartPresenter {
     onRegister() {
         window.location.assign("#/register");
     }
-    
-    
 }
 
 const startPresenter = new StartPresenter();
-
 export default startPresenter;

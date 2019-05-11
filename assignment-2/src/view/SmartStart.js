@@ -1,8 +1,19 @@
 import React, { Component } from "react";
 import Start from "./Start";
+import { connect } from "react-redux";
 import StartPresenter from "../presenter/startPresenter";
 
-export default class SmartStart extends Component {
+const mapModelStateToComponentState = state => ({
+});
+
+function mapDispatchToProps(dispatch) {
+    return {
+        onLogin: StartPresenter.onLogin,
+        onRegister: StartPresenter.onRegister
+    };
+}
+
+class SmartStart extends Component {
     constructor(props) {
         super(props);
     }
@@ -10,8 +21,10 @@ export default class SmartStart extends Component {
     render() {
         return (
             <Start
-                onLogin={StartPresenter.onLogin}
-                onRegister={StartPresenter.onRegister} />
+                onLogin={this.props.onLogin}
+                onRegister={this.props.onRegister} />
         );
     }
 }
+
+export default connect(mapModelStateToComponentState, mapDispatchToProps)(SmartStart);

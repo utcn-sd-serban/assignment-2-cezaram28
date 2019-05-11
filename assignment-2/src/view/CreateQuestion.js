@@ -1,7 +1,7 @@
 import React from "react";
 import user from "../model/user";
 
-const CreateQuestion = ({ title, text, tags, onCreate, onChange, onLogout }) => (
+const CreateQuestion = ({ user, title, text, tags, onCreate, onChange, onLogout }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -12,7 +12,7 @@ const CreateQuestion = ({ title, text, tags, onCreate, onChange, onLogout }) => 
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.users[user.state.currentUserIndex].username}
+                        {user !== undefined ? user.username : ""}
                     </a>
                     <div class="buttons">
                         <a class="button is-light" onClick={onLogout}>

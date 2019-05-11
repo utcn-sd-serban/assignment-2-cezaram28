@@ -1,6 +1,9 @@
-import question from "../model/question";
-import vote from "../model/vote";
-import user from "../model/user";
+import * as questionActions from "../model/question/questionActions";
+import * as userActions from "../model/user/userActions";
+import * as userSelectors from "../model/user/userSelectors";
+import * as voteSelectors from "../model/vote/voteSelectors";
+import * as voteActions from "../model/vote/voteActions";
+import store from "../model/store/store";
 
 class QuestionListPresenter {
 
@@ -10,7 +13,7 @@ class QuestionListPresenter {
 
     onLogout() {
         window.location.assign("#");
-        user.logout();
+        store.dispatch(userActions.logout());
     }
 
     onCreateQuestion() {
@@ -22,21 +25,25 @@ class QuestionListPresenter {
     }
 
     onChange(property, value) {
-        question.changeNewQuestionProperty(property, value);
+        store.dispatch(questionActions.changeNewQuestionProperty(property, value));
+    }
+
+    init() {
+        store.dispatch(questionActions.changeNewQuestionProperty("tags", ""));
+        store.dispatch(questionActions.changeNewQuestionProperty("title", ""));
     }
 
     onSearch(title) {
-        //question.findByTitle(title);
-        question.changeNewQuestionProperty("title", title);
-        question.changeNewQuestionProperty("text", "");
-        question.changeNewQuestionProperty("tags", "");
+        store.dispatch(questionActions.changeNewQuestionProperty("title", title));
+        store.dispatch(questionActions.changeNewQuestionProperty("text", ""));
+        store.dispatch(questionActions.changeNewQuestionProperty("tags", ""));
         window.location.assign("#/questions-list/" + title);
     }
 
     onTagClick(tag) {
-        question.changeNewQuestionProperty("title", "");
-        question.changeNewQuestionProperty("text", "");
-        question.changeNewQuestionProperty("tags", tag);
+        store.dispatch(questionActions.changeNewQuestionProperty("title", ""));
+        store.dispatch(questionActions.changeNewQuestionProperty("text", ""));
+        store.dispatch(questionActions.changeNewQuestionProperty("tags", tag));
         window.location.assign("#/questions-list/" + tag);
     }
 
@@ -45,7 +52,7 @@ class QuestionListPresenter {
     }
 
     onDelete(index) {
-        question.deleteQuestion(index);
+        store.dispatch(questionActions.deleteQuestion(index));
     }
 
     onEdit(index) {
@@ -54,32 +61,32 @@ class QuestionListPresenter {
 
     onVote(votedQuestion, votedAnswer, type) {
         if (votedQuestion !== undefined) {
-            let v = vote.findByQuestion(votedQuestion.id, user.state.currentUserIndex);
+            let v = voteSelectors.findByQuestion(votedQuestion.id, userSelectors.getCurrentIndex());
             if (v.length > 0) {
                 //already voted
                 if (v[0].type === "up" && type === "down") {
                     //change from upvote to downvote
-                    user.updateScore(votedQuestion.author.id, -7);
-                    question.changeQuestionScore(votedQuestion.id, -2);
-                    vote.changeVoteType(v[0].id, type);
+                    store.dispatch(userActions.updateScore(votedQuestion.author.id, -7));
+                    store.dispatch(questionActions.changeQuestionScore(votedQuestion.id, -2));
+                    store.dispatch(voteActions.changeVoteType(v[0].id, type));
                 }
                 else if (v[0].type === "down" && type === "up") {
                     //change from down to up
-                    user.updateScore(votedQuestion.author.id, +7);
-                    question.changeQuestionScore(votedQuestion.id, +2);
-                    vote.changeVoteType(v[0].id, type);
+                    store.dispatch(userActions.updateScore(votedQuestion.author.id, 7));
+                    store.dispatch(questionActions.changeQuestionScore(votedQuestion.id, 2));
+                    store.dispatch(voteActions.changeVoteType(v[0].id, type));
                 }
             } else {
-                vote.addVote(votedQuestion, undefined, type);
+                store.dispatch(voteActions.addVote(votedQuestion, undefined, type, userSelectors.getCurrentUser()));
                 if (type === "down") {
                     //downvote
-                    user.updateScore(votedQuestion.author.id, -2);
-                    question.changeQuestionScore(votedQuestion.id, -1);
+                    store.dispatch(userActions.updateScore(votedQuestion.author.id, -2));
+                    store.dispatch(questionActions.changeQuestionScore(votedQuestion.id, -1));
                 }
                 else {
                     //up
-                    user.updateScore(votedQuestion.author.id, 5);
-                    question.changeQuestionScore(votedQuestion.id, 1);
+                    store.dispatch(userActions.updateScore(votedQuestion.author.id, 5));
+                    store.dispatch(questionActions.changeQuestionScore(votedQuestion.id, 1));
                 }
             }
         }

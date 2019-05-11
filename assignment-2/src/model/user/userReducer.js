@@ -114,7 +114,7 @@ function banUser(state, payload) {
         isBanned: true
     };
     let allUsers = state.users.concat([]);
-    allUsers[id] = currentUser;
+    allUsers[payload.id] = currentUser;
     return {
         ...state,
         users: allUsers
@@ -127,7 +127,7 @@ function updateScore(state, payload) {
         username: state.users[payload.id].username,
         password: state.users[payload.id].password,
         email: state.users[payload.id].email,
-        score: state.users[payload.id].score + value,
+        score: state.users[payload.id].score + payload.value,
         isAdmin: state.users[payload.id].isAdmin,
         isBanned: state.users[payload.id].isBanned
     };

@@ -8,13 +8,14 @@ export function changeVoteType(id, type) {
     };
 }
 
-export function addVote(question, answer, type) {
+export function addVote(question, answer, type, user) {
     return {
         type: "ADD_VOTE",
         payload: {
             question,
             answer,
-            type
+            type,
+            user
         }
     };
 }

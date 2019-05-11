@@ -1,9 +1,10 @@
-export function addAnswer(question, text) {
+export function addAnswer(question, text, user) {
     return {
         type: "ADD_ANSWER",
         payload: {
             question,
-            text
+            text,
+            user
         }
     };
 }

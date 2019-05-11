@@ -1,7 +1,7 @@
 import React from "react";
 import user from "../model/user"
 
-const QuestionDetails = ({ id, title, author, text, creationDate, voteCount, tags, answers, addAnswer, onEdit, onDelete, onVote, onLogout }) => (
+const QuestionDetails = ({ user, id, title, author, text, creationDate, voteCount, tags, answers, addAnswer, onEdit, onDelete, onVote, onLogout }) => (
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -12,7 +12,7 @@ const QuestionDetails = ({ id, title, author, text, creationDate, voteCount, tag
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user.state.users[user.state.currentUserIndex].username}
+                        {user !== undefined ? user.username : ""}
                     </a>
                     <div class="buttons">
                         <a class="button is-light" onClick={onLogout}>
@@ -60,10 +60,10 @@ const QuestionDetails = ({ id, title, author, text, creationDate, voteCount, tag
                                 <td>{answer.text}</td>
                                 <td>{answer.voteCount}</td>
                                 <td>{answer.creationDate}</td>
-                                <td>{answer.author.id === user.state.currentUserIndex || user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onEdit(answer.id, answer.question.id)}>Edit</button> : ""}</td>
-                                <td>{answer.author.id === user.state.currentUserIndex || user.state.users[user.state.currentUserIndex].isAdmin ? <button class="button is-small" onClick={() => onDelete(answer.id)}>Delete</button> : ""}</td>
-                                <td>{answer.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(undefined, answer, "up")}>Upvote</button> : ""}</td>
-                                <td>{answer.author.id !== user.state.currentUserIndex ? <button class="button is-small" onClick={() => onVote(undefined, answer, "down")}>Downvote</button> : ""}</td>
+                                <td>{user !== undefined && (answer.author.id === user.id || user.isAdmin) ? <button class="button is-small" onClick={() => onEdit(answer.id, answer.question.id)}>Edit</button> : ""}</td>
+                                <td>{user !== undefined && (answer.author.id === user.id || user.isAdmin) ? <button class="button is-small" onClick={() => onDelete(answer.id)}>Delete</button> : ""}</td>
+                                <td>{user !== undefined && answer.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(undefined, answer, "up")}>Upvote</button> : ""}</td>
+                                <td>{user !== undefined && answer.author.id !== user.id ? <button class="button is-small" onClick={() => onVote(undefined, answer, "down")}>Downvote</button> : ""}</td>
                             </tr>
                         ))
                     }

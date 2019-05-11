@@ -1,9 +1,10 @@
-export function addQuestion(title, text, tags) {
+export function addQuestion(title, text, user, tags) {
     return {
         type: "ADD_QUESTION",
         payload: {
             title,
             text,
+            user,
             tags
         }
     }
