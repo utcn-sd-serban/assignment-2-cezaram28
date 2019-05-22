@@ -15,7 +15,7 @@ class RegisterPresenter {
             let userByMail = userSelectors.findByEmail(newUser.email);
             if (userByMail === undefined) {
                 store.dispatch(userActions.addUser(newUser.username, newUser.password, newUser.email));
-                store.dispatch(userActions.updateCurrentUserIndex(userSelectors.getIndex()));
+                store.dispatch(userActions.updateCurrentUserIndex(userSelectors.getIndex()-1));
                 window.location.assign("#/questions-list");
                 store.dispatch(userActions.changeNewUserProperty("username", ""));
                 store.dispatch(userActions.changeNewUserProperty("password", ""));

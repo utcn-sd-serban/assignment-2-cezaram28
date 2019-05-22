@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import UsersList from "./UsersList"
 import usersListPresenter from "../presenter/usersListPresenter";
+import * as userSelector from "../model/user/userSelectors";
 
 const mapUserStateToComponentState = state => ({
     users: state.userState.users,
-    user: state.userState.users[state.userState.currentUserIndex]
+    user: userSelector.findById(state.userState.currentUserIndex)
 });
 
 function mapDispatchToProps(dispatch) {

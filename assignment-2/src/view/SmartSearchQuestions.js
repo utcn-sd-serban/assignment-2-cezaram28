@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import * as questionSelector from "../model/question/questionSelectors";
 import SearchQuestions from "./SearchQuestions";
 import questionsListPresenter from "../presenter/questionsListPresenter";
+import * as userSelector from "../model/user/userSelectors";
 
 const mapQuestionStateToComponentState = state => ({
     questions: state.questionState.newQuestion.title === "" ?
         (state.questionState.newQuestion.tags === "" ? state.questionState.questions : questionSelector.findByTag(state.questionState.newQuestion.tags)) :
         questionSelector.findByTitle(state.questionState.newQuestion.title),
-    user: state.userState.users[state.userState.currentUserIndex]
+    user: userSelector.findById(state.userState.currentUserIndex)
 });
 
 function mapDispatchToProps(dispatch) {

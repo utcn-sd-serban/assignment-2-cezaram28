@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import createQuestionPresenter from "../presenter/createQuestionPresenter";
 import CreateQuestion from "./CreateQuestion";
+import * as userSelector from "../model/user/userSelectors";
 
 const mapQuestionStateToComponentState = state => ({
     title: state.questionState.newQuestion.title,
-    user: state.userState.users[state.userState.currentUserIndex],
+    user: userSelector.findById(state.userState.currentUserIndex),
     text: state.questionState.newQuestion.text,
     tags: state.questionState.newQuestion.tags
 });

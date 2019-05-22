@@ -35,7 +35,7 @@ const initState = {
         isBanned: false
     },
     currentUserIndex: 2,
-    index: 2,
+    index: 3,
     route: "users-list"
 };
 

@@ -89,17 +89,18 @@ function addQuestion(state, payload) {
 }
 
 function editQuestion(state, payload) {
+    let question = state.questions.filter(q => q.id == payload.id)[0];
     let currentQuestion = {
         id: payload.id,
         title: payload.title,
-        author: state.questions[payload.id].author,
+        author: question.author,
         text: payload.text,
-        creationDate: state.questions[payload.id].creationDate,
-        voteCount: state.questions[payload.id].voteCount,
-        tags: state.questions[payload.id].tags
+        creationDate: question.creationDate,
+        voteCount: question.voteCount,
+        tags: question.tags
     };
     let allQuestions = state.questions.concat([]);
-    allQuestions[payload.id] = currentQuestion;
+    allQuestions[allQuestions.indexOf(question)] = currentQuestion;
     return {
         ...state,
         questions: allQuestions
@@ -126,7 +127,7 @@ function changeQuestionScore(state, payload) {
 
 function deleteQuestion(state, payload) {
     let allQuestions = state.questions.concat([]);
-    let question = allQuestions.filter(q => q.id === payload.id)[0];
+    let question = allQuestions.filter(q => q.id == payload.id)[0];
     allQuestions.splice(allQuestions.indexOf(question), 1);
     return {
         ...state,

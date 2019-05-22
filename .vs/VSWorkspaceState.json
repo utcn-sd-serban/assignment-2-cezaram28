@@ -2,10 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\assignment-2",
-    "\\assignment-2\\public",
     "\\assignment-2\\src",
-    "\\assignment-2\\src\\model"
+    "\\assignment-2\\src\\model",
+    "\\assignment-2\\src\\model\\answer",
+    "\\assignment-2\\src\\model\\question",
+    "\\assignment-2\\src\\model\\store",
+    "\\assignment-2\\src\\model\\tag",
+    "\\assignment-2\\src\\model\\user",
+    "\\assignment-2\\src\\presenter",
+    "\\assignment-2\\src\\view"
   ],
-  "SelectedNode": "\\assignment-2\\src\\presenter",
+  "SelectedNode": "\\assignment-2\\src\\model\\user\\userSelectors.js",
   "PreviewInSolutionExplorer": false
 }

@@ -4,6 +4,10 @@ export function findByUsername(username) {
     return store.getState().userState.users.filter(u => u.username == username)[0];
 }
 
+export function findById(id) {
+    return store.getState().userState.users.filter(u => u.id == id)[0];
+}
+
 export function findByEmail(email) {
     return store.getState().userState.users.filter(u => u.email == email)[0];
 }

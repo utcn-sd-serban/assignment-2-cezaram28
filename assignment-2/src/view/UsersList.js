@@ -26,6 +26,7 @@ const UsersList = ({ user, users, title, onLogout, onBan }) => (
             <table class="table is-striped">
                 <thead>
                     <tr>
+                        <th>id</th>
                         <th>username</th>
                         <th>score</th>
                         <th />
@@ -35,6 +36,7 @@ const UsersList = ({ user, users, title, onLogout, onBan }) => (
                     {
                         users.map((u, index) => (
                             <tr key={index}>
+                                <td>{u.id}</td>
                                 <td>{u.username}</td>
                                 <td>{u.score}</td>
                                 <td>{user !== undefined && user.id !== -1 ? user.isAdmin ? <button class="button is-small" onClick={() => onBan(u.id)}>Ban</button> : "" : ""}</td>

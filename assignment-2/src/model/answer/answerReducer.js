@@ -1,5 +1,3 @@
-import store from "../store/store";
-
 const initState = {
     answers: [{
         id: 0,
@@ -85,16 +83,13 @@ function addAnswer(state, payload) {
 }
 
 function editAnswer(state, payload) {
-    let currentAnswer = {
-        id: payload.id,
-        question: state.answers[payload.id].question,
-        author: state.answers[payload.id].author,
-        text: payload.text,
-        creationDate: state.answers[payload.id].creationDate,
-        voteCount: state.answers[payload.id].voteCount
-    };
+    let currentAnswer = state.answers.filter(answer => answer.id == payload.id)[0];
     let allAnswers = state.answers.concat([]);
-    allAnswers[payload.id] = currentAnswer;
+    let index = allAnswers.indexOf(currentAnswer);
+    allAnswers[index] = {
+        ...allAnswers[index],
+        text: payload.text
+    };
     return {
         ...state,
         answers: allAnswers

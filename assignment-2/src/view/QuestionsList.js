@@ -13,7 +13,7 @@ const QuestionsList = ({ questions, user, tags, title, onSearch, onChange, onCre
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a class="navbar-item">
-                        {user !== undefined ? user.username: ""}
+                        {user !== undefined ? user.username: "x"}
                     </a>
                     <div class="buttons">
                         {user !== undefined && user.isAdmin ? <button class="button is-light" onClick={onUsers}>Users</button> : ""}
